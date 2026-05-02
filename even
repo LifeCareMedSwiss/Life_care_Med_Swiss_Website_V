@@ -8,7 +8,7 @@
 
 <style>
 /* DEIN GANZES CSS HIER */
-/* NAV BASIC */
+/* ROOT NAV */
 nav ul {
   list-style: none;
   margin: 0;
@@ -26,73 +26,62 @@ nav a {
   color: white;
   text-decoration: none;
   font-weight: 600;
-  padding: 8px 12px;
+  padding: 10px 12px;
   display: inline-block;
 }
 
-/* DROPDOWN ROOT */
-.has-dropdown {
+/* DROPDOWN WRAPPER */
+.dropdown {
   position: relative;
 }
 
-/* MEGA MENU */
-.mega-menu {
+/* BUTTON */
+.dropbtn {
+  cursor: pointer;
+}
+
+/* DROPDOWN BOX */
+.dropdown-content {
+  display: none;
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  left: 0;
 
-  width: min(1200px, 95vw);
   background: white;
-  color: black;
+  min-width: 600px;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  padding: 20px;
+
+  z-index: 9999;
 
   display: flex;
   gap: 40px;
-  padding: 30px;
-
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  z-index: 99999;
-
-  transition: all 0.25s ease;
 }
 
 /* SHOW ON HOVER */
-.has-dropdown:hover .mega-menu {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+.dropdown:hover .dropdown-content {
+  display: flex;
 }
 
-/* COLUMNS */
-.mega-column {
-  min-width: 220px;
+/* COLUMN STYLE */
+.column {
+  min-width: 180px;
 }
 
-.mega-column h3 {
-  margin-bottom: 10px;
+.column h4 {
   color: #0b2a4a;
+  margin-bottom: 10px;
 }
 
-.mega-column h4 {
-  margin: 10px 0;
-  color: #18b6d6;
-}
-
-/* LINKS */
-.mega-menu a {
+.dropdown-content a {
   display: block;
   padding: 6px 0;
   color: #333;
   text-decoration: none;
-  cursor: pointer;
 }
 
-.mega-menu a:hover {
+.dropdown-content a:hover {
   color: #18b6d6;
 }
 
@@ -1449,10 +1438,15 @@ function showCategory(category){
 }
 
 function openLightbox(src){
+
   const lb = document.getElementById("lightbox");
   const img = document.getElementById("lightbox-img");
 
-  if(!src || !img) return;
+  console.log("IMAGE PATH:", src);
+
+  img.onerror = function(){
+    console.error("IMAGE NOT FOUND:", src);
+  };
 
   img.src = src;
   lb.classList.add("active");
@@ -1472,31 +1466,36 @@ function closePrivacyPopup(){
 
 function showSection(id){
 
-  // HERO immer ausblenden (außer home)
-  const hero = document.querySelector(".hero");
+  // alles verstecken
+  document.querySelector(".hero").style.display = "none";
 
-  // alle pages ausblenden
   document.querySelectorAll(".page").forEach(sec=>{
     sec.style.display = "none";
   });
 
+  // HOME
   if(id === "home"){
-    hero.style.display = "block";
+    document.querySelector(".hero").style.display = "block";
     window.scrollTo(0,0);
     return;
   }
 
-  hero.style.display = "none";
-
+  // Ziel anzeigen
   const target = document.getElementById(id);
+
   if(target){
     target.style.display = "block";
+  } else {
+    console.warn("Section nicht gefunden:", id);
+    document.querySelector(".hero").style.display = "block";
   }
 
   window.scrollTo(0,0);
 }
 
-
+document.addEventListener("DOMContentLoaded", function(){
+  showSection("home");
+});
 showCategory('all');
 function openRegDocsPopup(){
     document.getElementById("regPopup").style.display = "flex";
