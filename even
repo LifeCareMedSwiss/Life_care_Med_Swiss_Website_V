@@ -8,109 +8,88 @@
 
 <style>
 /* DEIN GANZES CSS HIER */
-
-.dropdown-menu {
-  width: 100%;
-  border: none;
-  border-radius: 0;
-}
-
-.dropdown-content {
-  background: white;
-}
-
-.dropdown-item {
-  padding: 10px 15px;
-  display: block;
-}
-
-.dropdown-menu {
-  left: 0 !important;
-  right: 0 !important;
-  width: 100vw;
-}
-
+/* NAV BASIC */
 nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-gap: 40px;          /* 🔥 DAS IST DER KEY */
+  gap: 40px;
   align-items: center;
+}
+
+nav li {
+  position: relative;
 }
 
 nav a {
   color: white;
   text-decoration: none;
   font-weight: 600;
-
-  padding: 8px 12px;     /* 🔥 macht klickbar + spacing */
+  padding: 8px 12px;
   display: inline-block;
 }
 
-nav li {
+/* DROPDOWN ROOT */
+.has-dropdown {
   position: relative;
-  white-space: nowrap;   /* 🔥 verhindert Umbruch */
 }
 
-.navbar {
-  position: relative;
-  z-index: 10000;
-}
-
+/* MEGA MENU */
 .mega-menu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
 
-  width: 100%;
-  background: #ffffff;
+  width: min(1200px, 95vw);
+  background: white;
   color: black;
-
 
   display: flex;
   gap: 40px;
-  padding: 30px 60px;
+  padding: 30px;
 
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 
-   transform: translateX(-50%);
-  left: 50%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  z-index: 99999;
 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-  z-index: 999;
+  transition: all 0.25s ease;
 }
 
-.menu-link {
-  cursor: pointer;
-}
-
-.menu-item:hover .mega-menu {
+/* SHOW ON HOVER */
+.has-dropdown:hover .mega-menu {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translate(-50%, 0);
+  transform: translateX(-50%) translateY(0);
 }
 
+/* COLUMNS */
 .mega-column {
   min-width: 220px;
 }
 
-.menu-item {
-  padding-bottom: 20px;
+.mega-column h3 {
+  margin-bottom: 10px;
+  color: #0b2a4a;
 }
 
-.mega-menu {
-  margin-top: -10px;
+.mega-column h4 {
+  margin: 10px 0;
+  color: #18b6d6;
 }
 
+/* LINKS */
 .mega-menu a {
   display: block;
   padding: 6px 0;
   color: #333;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .mega-menu a:hover {
@@ -516,7 +495,7 @@ Regulatory Documents
  
  <li><a href="#" onclick="showSection('catalog')">Catalog</a></li>
 
-<li class="menu-item dropdown">
+<li class="menu-item has-dropdown">
   <a href="#">Products</a>
 
   <div class="mega-menu">
@@ -1278,19 +1257,14 @@ function setLang(lang){
   });
 }
 
-document.addEventListener("click", function(e){
+document.addEventListener("DOMContentLoaded", function () {
 
-  const link = e.target.closest(".menu-link");
-
-  if(!link) return;
-
-  e.preventDefault();
-
-  const img = link.getAttribute("data-img");
-
-  if(img){
-    openLightbox(img);
-  }
+  document.querySelectorAll(".has-dropdown > a").forEach(link => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      this.parentElement.classList.toggle("open");
+    });
+  });
 
 });
 
@@ -1498,25 +1472,22 @@ function closePrivacyPopup(){
 
 function showSection(id){
 
-  // hero ausblenden
-  document.querySelector(".hero").style.display = "none";
+  // HERO immer ausblenden (außer home)
+  const hero = document.querySelector(".hero");
 
-  // alle pages verstecken
+  // alle pages ausblenden
   document.querySelectorAll(".page").forEach(sec=>{
     sec.style.display = "none";
   });
 
-  // HOME = special case
   if(id === "home"){
-    document.querySelector(".hero").style.display = "block";
-    document.querySelectorAll(".page").forEach(sec=>{
-      sec.style.display = "block";
-    });
+    hero.style.display = "block";
     window.scrollTo(0,0);
     return;
   }
 
-  // nur gewählte section zeigen
+  hero.style.display = "none";
+
   const target = document.getElementById(id);
   if(target){
     target.style.display = "block";
@@ -1524,7 +1495,6 @@ function showSection(id){
 
   window.scrollTo(0,0);
 }
-
 
 
 showCategory('all');
