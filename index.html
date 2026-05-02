@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,27 @@
 
 <style>
 /* DEIN GANZES CSS HIER */
+
+.dropdown-menu {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+.dropdown-content {
+  background: white;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  display: block;
+}
+
+.dropdown-menu {
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw;
+}
 
 nav ul {
   list-style: none;
@@ -893,7 +915,7 @@ We stand for competitive pricing, <span class="highlight">highest quality standa
 </div>
 
 </header>
-<section id="video" style="text-align:center; padding:60px 20px;">class="page">
+<section id="video" style="text-align:center; padding:60px 20px;" class="page">
 
   <h2>Introduction Video</h2>
 
@@ -902,7 +924,7 @@ We stand for competitive pricing, <span class="highlight">highest quality standa
   </video>
 
 </section>
-<section id="home">class="page">
+<section id="home"  class="page">
 <h2>LifeCare Med Swiss</h2>
 <p style="text-align:center;"
 data-en="Our integrated model combines regulatory expertise, manufacturing partnerships, and global distribution to accelerate market entry and maximize product reach."
@@ -916,7 +938,7 @@ Our integrated model combines regulatory expertise, manufacturing partnerships, 
 
 </section>
 
-<section id="about">class="page">
+<section id="about" class="page">
 <h2 data-en="About Us" data-de="Über uns">About Us</h2>
 <p style="text-align:center; max-width:800px; margin:auto;"
 data-en="LifeCare Med Swiss, acting as CH-Rep, manufacturer, and importer, is based in Switzerland. We are a strategic partner of medical devices for distributors, importers, dealers, and healthcare professionals, with a strong focus on quality, efficiency, competitive pricing, and regulatory responsibility to ensure optimal market access worldwide."
@@ -1043,7 +1065,7 @@ LifeCare Med Swiss, acting as CH-Rep, manufacturer, and importer, is based in Sw
 
 </section>
 
-<section id="products">class="page">
+<section id="products" class="page">
 <h2 data-en="Products" data-de="Produkte">Products</h2>
 
 <div class="category-bar">
@@ -1106,7 +1128,7 @@ LifeCare Med Swiss, acting as CH-Rep, manufacturer, and importer, is based in Sw
   </div>
 </div>
 
-<section id="career">class="page">
+<section id="career" class="page">
     <h2 data-en="Career" data-de="Karriere">Career</h2>
     <p style="text-align:center;"
  data-en="We are looking for motivated professionals in MedTech, Regulatory Affairs, Engineering, Production, Marketing & Sales. Remote work is encouraged where possible."  
@@ -1118,7 +1140,7 @@ LifeCare Med Swiss, acting as CH-Rep, manufacturer, and importer, is based in Sw
     </p>
 </section>
 
-<section id="catalog">class="page"> 
+<section id="catalog" class="page"> 
  <h2 
     data-en="Catalog"
     data-de="Katalog"
@@ -1140,7 +1162,7 @@ LifeCare Med Swiss, acting as CH-Rep, manufacturer, and importer, is based in Sw
   </p>
 </section>
 
-<section id="regulatory-documents">class="page">
+<section id="regulatory-documents" class="page">
 
   <h2 
     data-en="Regulatory Documents"
@@ -1256,16 +1278,19 @@ function setLang(lang){
   });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("click", function(e){
 
-  document.querySelectorAll(".menu-link").forEach(link => {
-    link.addEventListener("click", function(e){
-      e.preventDefault();
+  const link = e.target.closest(".menu-link");
 
-      const img = this.getAttribute("data-img");
-      openLightbox(img);
-    });
-  });
+  if(!link) return;
+
+  e.preventDefault();
+
+  const img = link.getAttribute("data-img");
+
+  if(img){
+    openLightbox(img);
+  }
 
 });
 
@@ -1450,9 +1475,13 @@ function showCategory(category){
 }
 
 function openLightbox(src){
-    const lb = document.getElementById("lightbox");
-    lb.classList.add("active");
-    document.getElementById("lightbox-img").src = src;
+  const lb = document.getElementById("lightbox");
+  const img = document.getElementById("lightbox-img");
+
+  if(!src || !img) return;
+
+  img.src = src;
+  lb.classList.add("active");
 }
 
 function closeLightbox(){
